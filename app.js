@@ -12,7 +12,7 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 
-// Fix 1: Dùng process.cwd() để Vercel luôn tìm thấy thư mục views
+// Cấu hình đường dẫn thư mục views
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -49,10 +49,6 @@ app.get('/', (req, res) => {
   res.redirect('/orders');
 });
 
-// Fix 2: Không chạy app.listen trên Vercel để tránh lỗi 500 Timeout
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => console.log(`Server: http://localhost:${PORT}`));
-}
-
-module.exports = app;
+// Cấu hình cổng cho Render / Local (Bắt buộc phải có app.listen để Render chạy được)
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
