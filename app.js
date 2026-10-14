@@ -6,12 +6,12 @@ const orderRoutes = require('./routes/orderRoutes');
 const authRoutes = require('./routes/authRoutes');
 const { isAuthenticated } = require('./middlewares/auth');
 const Product = require('./models/productModel');
-
+const path = require('path');
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
 // Cấu hình session
 app.use(session({
   secret: 'duong_shop_secret_key',
