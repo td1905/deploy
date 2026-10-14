@@ -49,6 +49,8 @@ app.get('/', (req, res) => {
   res.redirect('/orders');
 });
 
-// Cấu hình cổng cho Render / Local (Bắt buộc phải có app.listen để Render chạy được)
+// CHỐT HẠ CHO RENDER: Mở cổng và bind vào 0.0.0.0
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+});
