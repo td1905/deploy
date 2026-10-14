@@ -1,12 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const c = require('../controllers/orderController');
+const orderController = require('../controllers/orderController');
 
-router.get('/', c.getList);
-router.get('/create', c.getCreate);
-router.post('/create', c.postCreate);
-router.get('/update/:id', c.getUpdate);
-router.post('/update/:id', c.postUpdate);
-router.get('/delete/:id', c.deleteOrder); // Dùng GET cho nút Delete để không cần cài thư viện method-override
+// Phải import đủ 2 hàm bảo vệ
+const { isAuthenticated, isAdmin } = require('../middlewares/auth');
+
+// Trang danh sách: Bất kỳ ai đăng nhập (user/admin) đều xem được
+router.get('/', isAuthenticated, orderController.getAllOrders);
+
+// Chức năng Tạo đơn: Ai cũng tạo được
+router.post('/create', isAuthenticated, orderController.createOrder);
+
+// 🔒 Chức năng XÓA: Gắn "isAdmin" vào giữa để chặn user thường
+router.post('/delete/:id', isAuthenticated, isAdmin, orderController.deleteOrder);
 
 module.exports = router;
